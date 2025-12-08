@@ -1,0 +1,53 @@
+# =========================
+# Environment files
+# =========================
+.env
+.env.*
+
+# =========================
+# Dot files & folders
+# (everything starting with .)
+# =========================
+.*
+!.gitignore
+!.github/
+!.editorconfig
+
+# =========================
+# Go build artifacts
+# =========================
+bin/
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.out
+
+# =========================
+# Go test & coverage
+# =========================
+*.test
+*.cover
+coverage.out
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+
+# =========================
+# IDE / Editor
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+Thumbs.db
