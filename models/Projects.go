@@ -1,15 +1,15 @@
 package models
 
-import(
+import (
 	"gorm.io/gorm"
 )
 
-type Project struct{
+type Project struct {
 	gorm.Model
-	UserID uint `json:"user_id"`
-	Name string `json:"name"`
+	UserID      uint   `json:"user_id"`
+	Name        string `json:"name"`
 	Description string `json:"description"`
-	WebUrl string `json:"web_url"`
-	
+	WebUrl      string `json:"web_url"`
+
 	Skills []Skills `gorm:"many2many:project_skills"`
 }

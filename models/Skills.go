@@ -4,8 +4,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type Skills struct{
+type Skills struct {
 	gorm.Model
 	SkillName string `json:"skill_name"`
-	Category string `json:"category"`
+	Category  string `json:"category"`
 }

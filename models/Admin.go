@@ -1,12 +1,12 @@
 package models
 
-import(
+import (
 	"gorm.io/gorm"
 )
 
-type Admin struct{
+type Admin struct {
 	gorm.Model
 	Username string `json:"username"`
-	Email string `json:"email"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
