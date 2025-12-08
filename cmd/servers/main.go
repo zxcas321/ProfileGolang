@@ -1,9 +1,10 @@
 package main
 
 import(
-	"fmt"
+	"github.com/zxcas321/ProfileGolang/config"
 )
 
 func main(){
-	fmt.Printf("print")
+	config.LoadEnv()
+	config.ConnectDB()
 }
