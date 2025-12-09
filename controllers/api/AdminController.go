@@ -9,5 +9,5 @@ import (
 )
 
 func CreateAdmin(c *gin.Context){
-	
+	car req request.AdminRequest
 }
