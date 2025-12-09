@@ -3,38 +3,58 @@ package repositories
 import (
 	"github.com/zxcas321/ProfileGolang/config"
 	"github.com/zxcas321/ProfileGolang/models"
+
+	"gorm.io/gorm"
 )
 
 type CertificationRepositoryStruct struct{}
 
 var CertificationRepository = &CertificationRepositoryStruct{}
 
-func (r *CertificationRepositoryStruct) Create(certification *models.Certification) error {
+func (r *CertificationRepositoryStruct) CreateCertification(certification *models.Certification) error {
 	if err := config.DB.Create(certification).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (r *CertificationRepositoryStruct) FindAll() ([]models.Certification, error) {
+func (r *CertificationRepositoryStruct) FindAllCertification() ([]models.Certification, error) {
 	var certification []models.Certification
-	if err := config.DB.Find(certification).Error; err != nil {
-		return nil, err
-	}
-	return certification, nil
+
+	err := config.DB.
+		Find(&certification).
+		Error
+
+	return certification, err
 }
 
-func (r *CertificationRepositoryStruct) FindByID(certification *models.Certification, id uint) error {
-	return config.DB.First(certification, id).Error
+func (r *CertificationRepositoryStruct) FindByIDCertification(id uint) (models.Certification, error) {
+	var certification models.Certification
+
+	err := config.DB.
+		First(&certification, id).
+		Error
+
+	return certification, err
 }
 
-func (r *CertificationRepositoryStruct) Update(certification *models.Certification) error {
-	if err := config.DB.Save(certification).Error; err != nil {
-		return err
+func (r *CertificationRepositoryStruct) UpdateCertification(id uint, data map[string]interface{}) error {
+	err := config.DB.
+		Model(&models.Certification{}).
+		Where("id = ?", id).
+		Updates(data)
+
+	if err.Error != nil {
+		return err.Error
 	}
+
+	if err.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+
 	return nil
 }
 
-func (R *CertificationRepositoryStruct) Delete(id uint) error {
+func (R *CertificationRepositoryStruct) DeleteCertification(id uint) error {
 	return config.DB.Delete([]models.Academics{}, id).Error
 }
