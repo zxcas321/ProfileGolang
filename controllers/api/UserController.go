@@ -28,14 +28,14 @@ func CreateUser(c *gin.Context) {
 		ProfilePicture: req.ProfilePicture,
 	}
 
-	if err := services.Create(&user); err != nil {
+	if err := services.CreateUser(&user); err != nil {
 		c.JSON(500, gin.H{
 			"message": "failed to create user",
 		})
 		return
 	}
 
-	resp, _ := services.FindByID(user.ID)
+	resp, _ := services.FindByIDUser(user.ID)
 
 	c.JSON(201, gin.H{
 		"data": resp,
@@ -43,7 +43,7 @@ func CreateUser(c *gin.Context) {
 }
 
 func IndexUser(c *gin.Context) {
-	users, err := services.FindAll()
+	users, err := services.FindAllUser()
 	if err != nil {
 		c.JSON(500, gin.H{
 			"message": "failed to fetch users",
@@ -65,7 +65,7 @@ func ShowUser(c *gin.Context) {
 		return
 	}
 
-	user, err := services.FindByID(decodedID)
+	user, err := services.FindByIDUser(decodedID)
 	if err != nil {
 		c.JSON(404, gin.H{
 			"message": "user not found",
@@ -110,12 +110,12 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	if err := services.Update(userID, data); err != nil {
+	if err := services.UpdateUser(userID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
 
-	user, _ := services.FindByID(userID)
+	user, _ := services.FindByIDUser(userID)
 	c.JSON(200, gin.H{"data": user})
 }
 
@@ -128,7 +128,7 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	if err := services.Delete(userID); err != nil {
+	if err := services.DeleteUser(userID); err != nil {
 		c.JSON(404, gin.H{"message": "user not found"})
 		return
 	}

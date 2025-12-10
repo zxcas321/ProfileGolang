@@ -3,7 +3,7 @@ package repositories
 import (
 	"github.com/zxcas321/ProfileGolang/config"
 	"github.com/zxcas321/ProfileGolang/models"
-	
+
 	"gorm.io/gorm"
 )
 
