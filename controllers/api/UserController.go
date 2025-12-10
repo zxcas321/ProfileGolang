@@ -12,9 +12,7 @@ func CreateUser(c *gin.Context) {
 	var req requests.UserRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(400, gin.H{
-			"message": err.Error(),
-		})
+		c.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
@@ -29,61 +27,44 @@ func CreateUser(c *gin.Context) {
 	}
 
 	if err := services.CreateUser(&user); err != nil {
-		c.JSON(500, gin.H{
-			"message": "failed to create user",
-		})
+		c.JSON(500, gin.H{"message": "failed to create user"})
 		return
 	}
 
 	resp, _ := services.FindByIDUser(user.ID)
 
-	c.JSON(201, gin.H{
-		"data": resp,
-	})
+	c.JSON(201, gin.H{"data": resp})
 }
 
 func IndexUser(c *gin.Context) {
 	users, err := services.FindAllUser()
 	if err != nil {
-		c.JSON(500, gin.H{
-			"message": "failed to fetch users",
-		})
+		c.JSON(500, gin.H{"message": "failed to fetch users"})
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"data": users,
-	})
+	c.JSON(200, gin.H{"data": users})
 }
 
 func ShowUser(c *gin.Context) {
-	decodedID, err := utils.DecodeID(c.Param("id"))
+	userID, err := utils.DecodeID(c.Param("id"))
 	if err != nil {
-		c.JSON(404, gin.H{
-			"message": "invalid Id",
-		})
+		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
 	}
 
-	user, err := services.FindByIDUser(decodedID)
-	if err != nil {
-		c.JSON(404, gin.H{
-			"message": "user not found",
-		})
+	user, err := services.FindByIDUser(userID)
+	if err != nil {c.JSON(404, gin.H{"message": "user not found"})
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"data": user,
-	})
+	c.JSON(200, gin.H{"data": user})
 }
 
 func UpdateUser(c *gin.Context) {
 	userID, err := utils.DecodeID(c.Param("id"))
 	if err != nil {
-		c.JSON(404, gin.H{
-			"message": "invalid Id",
-		})
+		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
 	}
 
@@ -122,9 +103,7 @@ func UpdateUser(c *gin.Context) {
 func DeleteUser(c *gin.Context) {
 	userID, err := utils.DecodeID(c.Param("id"))
 	if err != nil {
-		c.JSON(404, gin.H{
-			"message": "invalid Id",
-		})
+		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
 	}
 
@@ -133,7 +112,5 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"message": "user deleted successfully",
-	})
+	c.JSON(200, gin.H{"message": "user deleted successfully"})
 }
