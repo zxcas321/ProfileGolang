@@ -2,7 +2,7 @@ package requests
 
 import "time"
 
-type certificationRequest struct {
+type CertificationRequest struct {
 	Title      string     `json:"title"`
 	Issuer     string     `json:"issuer"`
 	IssueDate  time.Time  `json:"issue_date"`

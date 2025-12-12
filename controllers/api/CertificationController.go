@@ -8,92 +8,97 @@ import (
 	"github.com/zxcas321/ProfileGolang/utils"
 )
 
-func CreateAdmin(c *gin.Context) {
-	var req requests.AdminRequest
+func CreateCertification(c *gin.Context) {
+	var req requests.CertificationRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
-	admin := models.Admin{
-		Username: req.Username,
-		Email:    req.Email,
-		Password: req.Password,
+	certification := models.Certification{
+		Title: req.Title,
+		Issuer: req.Issuer,
+		IssueDate: req.IssueDate,
+		ExpiryDate: req.ExpiryDate,
+		ImageUrl: req.ImageUrl,
 	}
 
-	if err := services.CreateAdmin(&admin); err != nil {
-		c.JSON(500, gin.H{"message": "failed to create Admin"})
+	if err := services.CreateCertification(&certification); err != nil {
+		c.JSON(500, gin.H{"message": "failed to create certification"})
 		return
 	}
-	resp, _ := services.FindByIDAdmin(admin.ID)
+	resp, _ := services.FindByIDCertification(certification.ID)
 
 	c.JSON(201, gin.H{"data": resp})
 }
 
-func IndexAdmin(c *gin.Context) {
-	admin, err := services.FindAllAdmin()
+func IndexCertification(c *gin.Context) {
+	certification, err := services.FindAllCertification()
 	if err != nil {
-		c.JSON(500, gin.H{"message": "failerd to fetch admin"})
+		c.JSON(500, gin.H{"message": "failerd to fetch certification"})
 		return
 	}
 
-	c.JSON(200, gin.H{"data": admin})
+	c.JSON(200, gin.H{"data": certification})
 }
 
-func ShowAdmin(c *gin.Context) {
-	adminID, err := utils.DecodeID(c.Param("id"))
+func ShowCertification(c *gin.Context) {
+	certificationID, err := utils.DecodeID(c.Param("id"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
 	}
 
-	admin, err := services.FindByIDAdmin(adminID)
+	certification, err := services.FindByIDCertification(certificationID)
 	if err != nil {
-		c.JSON(404, gin.H{"message": "admin not found"})
+		c.JSON(404, gin.H{"message": "certification not found"})
 		return
 	}
 
-	c.JSON(200, gin.H{"Data": admin})
+	c.JSON(200, gin.H{"Data": certification})
 }
 
-func UpdateAdmin(c *gin.Context) {
-	adminID, err := utils.DecodeID(c.Param("id"))
+func UpdateCertification(c *gin.Context) {
+	certificationID, err := utils.DecodeID(c.Param("id"))
 	if err != nil {
 		c.JSON(404, gin.H{"Message": "invalid Id"})
 	}
 
-	var req requests.AdminRequest
+	var req requests.CertificationRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(400, gin.H{"message": err.Error()})
 	}
 
 	data := map[string]interface{}{}
 
-	if req.Username != "" {
-		data["username"] = req.Username
-	}
-	if req.Email != "" {
-		data["email"] = req.Email
+	data["title"] = req.Title
+	data["issuer"] = req.Issuer
+	data["issue_date"] = req.IssueDate
+	
+	if req.ExpiryDate == nil {
+		data["expiry_date"] = nil
+	}else{
+		data["expiry_date"] = req.ExpiryDate
 	}
 
-	if err := services.UpdateAdmin(adminID, data); err != nil {
+	if err := services.UpdateExperience(certificationID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
 
 }
 
-func DeleteAdmin(c *gin.Context) {
-	adminID, err := utils.DecodeID(c.Param("id"))
+func DeleteExperience(c *gin.Context) {
+	experienceID, err := utils.DecodeID(c.Param("id"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid id"})
 		return
 	}
 
-	if err := services.DeleteAdmin(adminID); err != nil {
-		c.JSON(4040, gin.H{"Message": "admin not found"})
+	if err := services.DeleteExperience(experienceID); err != nil {
+		c.JSON(4040, gin.H{"Message": "experience not found"})
 	}
 
-	c.JSON(200, gin.H{"message": "admin deleted successfully"})
+	c.JSON(200, gin.H{"message": "experience deleted successfully"})
 }

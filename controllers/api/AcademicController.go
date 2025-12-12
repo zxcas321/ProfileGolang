@@ -8,92 +8,98 @@ import (
 	"github.com/zxcas321/ProfileGolang/utils"
 )
 
-func CreateAdmin(c *gin.Context) {
-	var req requests.AdminRequest
+func CreateAcademic(c *gin.Context) {
+	var req requests.AcademicRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(400, gin.H{"message": err.Error()})
 		return
 	}
 
-	admin := models.Admin{
-		Username: req.Username,
-		Email:    req.Email,
-		Password: req.Password,
+	academic := models.Academics{
+		Institution : req.Institution,
+		Degree : req.Degree,
+		Field : req.Field,
+		StartDate : req.StartDate,
+		EndDate : req.EndDate,
+		GPA :req.GPA,
+		Description : req.Description,
 	}
 
-	if err := services.CreateAdmin(&admin); err != nil {
-		c.JSON(500, gin.H{"message": "failed to create Admin"})
+	if err := services.CreateAcademic(&academic); err != nil {
+		c.JSON(500, gin.H{"message": "failed to create Academics"})
 		return
 	}
-	resp, _ := services.FindByIDAdmin(admin.ID)
+	resp, _ := services.FindByIDAcademic(academic.ID)
 
 	c.JSON(201, gin.H{"data": resp})
 }
 
-func IndexAdmin(c *gin.Context) {
-	admin, err := services.FindAllAdmin()
+func IndexAcademic(c *gin.Context) {
+	academic, err := services.FindAllAcademic()
 	if err != nil {
-		c.JSON(500, gin.H{"message": "failerd to fetch admin"})
+		c.JSON(500, gin.H{"message": "failed to fetch academic"})
 		return
 	}
 
-	c.JSON(200, gin.H{"data": admin})
+	c.JSON(200, gin.H{"data": academic})
 }
 
-func ShowAdmin(c *gin.Context) {
-	adminID, err := utils.DecodeID(c.Param("id"))
+func ShowAcademic(c *gin.Context) {
+	academicID, err := utils.DecodeID(c.Param("id"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
 	}
 
-	admin, err := services.FindByIDAdmin(adminID)
+	academic, err := services.FindByIDAcademic(academicID)
 	if err != nil {
-		c.JSON(404, gin.H{"message": "admin not found"})
+		c.JSON(404, gin.H{"message": "academic not found"})
 		return
 	}
 
-	c.JSON(200, gin.H{"Data": admin})
+	c.JSON(200, gin.H{"Data": academic})
 }
 
-func UpdateAdmin(c *gin.Context) {
-	adminID, err := utils.DecodeID(c.Param("id"))
+func UpdateAcademic(c *gin.Context) {
+	academicID, err := utils.DecodeID(c.Param("id"))
 	if err != nil {
 		c.JSON(404, gin.H{"Message": "invalid Id"})
 	}
 
-	var req requests.AdminRequest
+	var req requests.AcademicRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(400, gin.H{"message": err.Error()})
 	}
 
 	data := map[string]interface{}{}
 
-	if req.Username != "" {
-		data["username"] = req.Username
-	}
-	if req.Email != "" {
-		data["email"] = req.Email
-	}
+	data["institution"] = req.Institution
+	data["degree"] = req.Degree
+	data["Field"] = req.Field
+	data["start_date"] = req.StartDate
+	data["end_date"] = req.EndDate
+	data["GPA"] = req.GPA
+	data["description"] = req.Description
 
-	if err := services.UpdateAdmin(adminID, data); err != nil {
+
+	if err := services.UpdateAcademic(academicID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
 
 }
 
-func DeleteAdmin(c *gin.Context) {
-	adminID, err := utils.DecodeID(c.Param("id"))
+func DeleteAcademic(c *gin.Context) {
+	academicID, err := utils.DecodeID(c.Param("id"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid id"})
 		return
 	}
 
-	if err := services.DeleteAdmin(adminID); err != nil {
-		c.JSON(4040, gin.H{"Message": "admin not found"})
+	if err := services.DeleteAcademic(academicID); err != nil {
+		c.JSON(4040, gin.H{"Message": "academic not found"})
 	}
 
-	c.JSON(200, gin.H{"message": "admin deleted successfully"})
+	c.JSON(200, gin.H{"message": "academic deleted successfully"})
 }

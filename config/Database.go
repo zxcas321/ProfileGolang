@@ -43,7 +43,6 @@ func autoMigrate() {
 		&models.User{},
 		&models.Skills{},
 		&models.Project{},
-		&models.ProjectSkills{},
 		&models.Experience{},
 		&models.Academics{},
 		&models.Certification{},

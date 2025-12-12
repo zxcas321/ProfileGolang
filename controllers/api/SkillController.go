@@ -9,6 +9,12 @@ import (
 )
 
 func CreateSkill(c *gin.Context) {
+	projectID, err := utils.DecodeID(c.Param("id"))
+	if err != nil {
+        c.JSON(404, gin.H{"message": "invalid project Id"})
+        return
+    }
+
 	var req requests.SkillRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -17,6 +23,7 @@ func CreateSkill(c *gin.Context) {
 	}
 
 	skill := models.Skills{
+		ProjectID : projectID,
 		SkillName: req.SkillName,
 		Category:  req.Category,
 	}

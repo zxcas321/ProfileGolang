@@ -11,7 +11,7 @@ func CreateAcademic(academic *models.Academics) error {
 	return repositories.AcademicRepository.CreateAcademic(academic)
 }
 
-func FindAllAcademic9() ([]response.AcademicsResponse, error) {
+func FindAllAcademic() ([]response.AcademicsResponse, error) {
 	academic, err := repositories.AcademicRepository.FindAllAcademic()
 	if err != nil {
 		return nil, err

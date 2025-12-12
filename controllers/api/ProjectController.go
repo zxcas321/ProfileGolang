@@ -9,6 +9,12 @@ import (
 )
 
 func CreateProject(c *gin.Context){
+	userID, err := utils.DecodeID(c.Param("id"))
+	if err != nil {
+        c.JSON(404, gin.H{"message": "invalid user Id"})
+        return
+    }
+
 	var req requests.ProjectRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -16,6 +22,7 @@ func CreateProject(c *gin.Context){
 	}
 
 	project := models.Project{
+		UserID : userID,
 		Name: req.Name,
 		Description: req.Description,
 		WebUrl: req.WebUrl,
@@ -91,4 +98,19 @@ func UpdateProject(c *gin.Context){
 
 	project, _ := services.FindByIDProject(projectID)
 	c.JSON(200, gin.H{"data": project})
+}
+
+func DeleteProject(c *gin.Context) {
+	projectID, err := utils.DecodeID(c.Param("id"))
+	if err != nil {
+		c.JSON(404, gin.H{"message": "invalid Id"})
+		return
+	}
+
+	if err := services.DeleteProject(projectID); err != nil {
+		c.JSON(404, gin.H{"message": "project not found"})
+		return
+	}
+
+	c.JSON(200, gin.H{"message" : "Deleted successfully"})
 }

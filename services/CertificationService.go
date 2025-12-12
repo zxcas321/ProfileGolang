@@ -7,8 +7,8 @@ import (
 	"github.com/zxcas321/ProfileGolang/response"
 )
 
-func CreateCertification(experienece *models.Experience) error {
-	return repositories.ExperienceRepository.CreateExperience(experienece)
+func CreateCertification(certification *models.Certification) error {
+	return repositories.CertificationRepository.CreateCertification(certification)
 }
 
 func FindAllCertification() ([]response.CertificationResponse, error) {
