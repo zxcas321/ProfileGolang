@@ -9,6 +9,12 @@ import (
 )
 
 func CreateCertification(c *gin.Context) {
+	userID, err := utils.DecodeID(c.Param("userId"))
+	if err != nil {
+        c.JSON(404, gin.H{"message": "invalid user Id"})
+        return
+    }
+
 	var req requests.CertificationRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -17,6 +23,7 @@ func CreateCertification(c *gin.Context) {
 	}
 
 	certification := models.Certification{
+		UserID : userID,
 		Title: req.Title,
 		Issuer: req.Issuer,
 		IssueDate: req.IssueDate,
@@ -44,7 +51,7 @@ func IndexCertification(c *gin.Context) {
 }
 
 func ShowCertification(c *gin.Context) {
-	certificationID, err := utils.DecodeID(c.Param("id"))
+	certificationID, err := utils.DecodeID(c.Param("certificationId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
@@ -60,7 +67,7 @@ func ShowCertification(c *gin.Context) {
 }
 
 func UpdateCertification(c *gin.Context) {
-	certificationID, err := utils.DecodeID(c.Param("id"))
+	certificationID, err := utils.DecodeID(c.Param("certificationId"))
 	if err != nil {
 		c.JSON(404, gin.H{"Message": "invalid Id"})
 	}
@@ -82,23 +89,23 @@ func UpdateCertification(c *gin.Context) {
 		data["expiry_date"] = req.ExpiryDate
 	}
 
-	if err := services.UpdateExperience(certificationID, data); err != nil {
+	if err := services.UpdateCertification(certificationID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
 
 }
 
-func DeleteExperience(c *gin.Context) {
-	experienceID, err := utils.DecodeID(c.Param("id"))
+func DeleteCertification(c *gin.Context) {
+	certificationID, err := utils.DecodeID(c.Param("certificationId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid id"})
 		return
 	}
 
-	if err := services.DeleteExperience(experienceID); err != nil {
-		c.JSON(4040, gin.H{"Message": "experience not found"})
+	if err := services.DeleteCertification(certificationID); err != nil {
+		c.JSON(4040, gin.H{"Message": "certification not found"})
 	}
 
-	c.JSON(200, gin.H{"message": "experience deleted successfully"})
+	c.JSON(200, gin.H{"message": "certification deleted successfully"})
 }

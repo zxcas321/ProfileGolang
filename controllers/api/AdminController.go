@@ -23,7 +23,7 @@ func CreateAdmin(c *gin.Context) {
 	}
 
 	if err := services.CreateAdmin(&admin); err != nil {
-		c.JSON(500, gin.H{"message": "failed to create Admin"})
+		c.JSON(500, gin.H{"message": err.Error()})
 		return
 	}
 	resp, _ := services.FindByIDAdmin(admin.ID)
@@ -34,7 +34,7 @@ func CreateAdmin(c *gin.Context) {
 func IndexAdmin(c *gin.Context) {
 	admin, err := services.FindAllAdmin()
 	if err != nil {
-		c.JSON(500, gin.H{"message": "failerd to fetch admin"})
+		c.JSON(500, gin.H{"message": "failed to fetch admin"})
 		return
 	}
 

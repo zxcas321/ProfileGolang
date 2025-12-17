@@ -40,6 +40,7 @@ func ConnectDB() {
 
 func autoMigrate() {
 	DB.AutoMigrate(
+		&models.Admin{},
 		&models.User{},
 		&models.Skills{},
 		&models.Project{},

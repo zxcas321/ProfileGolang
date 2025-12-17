@@ -9,7 +9,7 @@ import (
 )
 
 func CreateProject(c *gin.Context){
-	userID, err := utils.DecodeID(c.Param("id"))
+	userID, err := utils.DecodeID(c.Param("userId"))
 	if err != nil {
         c.JSON(404, gin.H{"message": "invalid user Id"})
         return
@@ -39,18 +39,19 @@ func CreateProject(c *gin.Context){
 }
 
 func IndexProject(c *gin.Context){
-	project, err := utils.DecodeID(c.Param("id"))
+	project, err := services.FindAllProject()
 	if err != nil {
-		c.JSON(500, gin.H{"message" : "failed to fetch project"})
+		c.JSON(500, gin.H{"message": "failed to fetch project"})
+		return
 	}
 
 	c.JSON(200, gin.H{"data" : project})
 }
 
 func ShowProject(c *gin.Context){
-	projectID, err := utils.DecodeID(c.Param("id"))
+	projectID, err := utils.DecodeID(c.Param("projectId"))
 	if err != nil {
-		c.JSON(404, gin.H{"message" : "invalid Id"})
+		c.JSON(404, gin.H{"message" : "invalid project Id"})
 		return
 	}
 
@@ -64,9 +65,9 @@ func ShowProject(c *gin.Context){
 }
 
 func UpdateProject(c *gin.Context){
-	projectID, err := utils.DecodeID(c.Param("id"))
+	projectID, err := utils.DecodeID(c.Param("projectId"))
 	if err != nil {
-		c.JSON(404, gin.H{"message" : "invalid Id"})
+		c.JSON(404, gin.H{"message" : "invalid project Id"})
 	}
 
 	var req requests.ProjectRequest
@@ -101,7 +102,7 @@ func UpdateProject(c *gin.Context){
 }
 
 func DeleteProject(c *gin.Context) {
-	projectID, err := utils.DecodeID(c.Param("id"))
+	projectID, err := utils.DecodeID(c.Param("projectId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return

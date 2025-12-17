@@ -9,7 +9,7 @@ import (
 )
 
 func CreateSkill(c *gin.Context) {
-	projectID, err := utils.DecodeID(c.Param("id"))
+	projectID, err := utils.DecodeID(c.Param("projectId"))
 	if err != nil {
         c.JSON(404, gin.H{"message": "invalid project Id"})
         return
@@ -49,7 +49,7 @@ func IndexSkill(c *gin.Context) {
 }
 
 func ShowSkill(c *gin.Context) {
-	skillID, err := utils.DecodeID(c.Param("id"))
+	skillID, err := utils.DecodeID(c.Param("skillId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
@@ -65,7 +65,7 @@ func ShowSkill(c *gin.Context) {
 }
 
 func UpdateSkill(c *gin.Context) {
-	skillID, err := utils.DecodeID(c.Param("id"))
+	skillID, err := utils.DecodeID(c.Param("skillId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
@@ -101,7 +101,7 @@ func UpdateSkill(c *gin.Context) {
 }
 
 func DeleteSkill(c *gin.Context) {
-	SkillID, err := utils.DecodeID(c.Param("id"))
+	SkillID, err := utils.DecodeID(c.Param("skillId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return

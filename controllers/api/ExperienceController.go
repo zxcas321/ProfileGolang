@@ -9,6 +9,12 @@ import (
 )
 
 func CreateExperience(c *gin.Context) {
+	userID, err := utils.DecodeID(c.Param("userId"))
+	if err != nil {
+        c.JSON(404, gin.H{"message": "invalid user Id"})
+        return
+    }
+
 	var req requests.ExperienceRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -16,6 +22,7 @@ func CreateExperience(c *gin.Context) {
 	}
 
 	experience := models.Experience{
+		UserID:      userID,
 		CompanyName: req.CompanyName,
 		Role:        req.Role,
 		StartDate:   req.StartDate,
@@ -33,16 +40,17 @@ func CreateExperience(c *gin.Context) {
 }
 
 func IndexExperience(c *gin.Context) {
-	experience, err := utils.DecodeID(c.Param("id"))
+	experience, err := services.FindAllExperience()
 	if err != nil {
 		c.JSON(500, gin.H{"message": "failed to fetch experience"})
+		return
 	}
 
 	c.JSON(200, gin.H{"data": experience})
 }
 
 func ShowExperience(c *gin.Context) {
-	experienceID, err := utils.DecodeID(c.Param("id"))
+	experienceID, err := utils.DecodeID(c.Param("experienceId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
@@ -58,7 +66,7 @@ func ShowExperience(c *gin.Context) {
 }
 
 func UpdateExperience(c *gin.Context) {
-	experienceID, err := utils.DecodeID(c.Param("id"))
+	experienceID, err := utils.DecodeID(c.Param("experienceId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 	}
@@ -91,4 +99,19 @@ func UpdateExperience(c *gin.Context) {
 
 	experience, _ := services.FindByIDExperience(experienceID)
 	c.JSON(200, gin.H{"data": experience})
+}
+
+func DeleteExperience(c *gin.Context) {
+	experienceId, err := utils.DecodeID(c.Param("experienceId"))
+	if err != nil {
+		c.JSON(404, gin.H{"message": "invalid Id"})
+		return
+	}
+
+	if err := services.DeleteExperience(experienceId); err != nil {
+		c.JSON(404, gin.H{"message": "experience not found"})
+		return
+	}
+
+	c.JSON(200, gin.H{"message" : "Deleted successfully"})
 }

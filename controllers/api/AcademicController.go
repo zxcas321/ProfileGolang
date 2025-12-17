@@ -9,6 +9,12 @@ import (
 )
 
 func CreateAcademic(c *gin.Context) {
+	userID, err := utils.DecodeID(c.Param("userId"))
+	if err != nil {
+        c.JSON(404, gin.H{"message": "invalid user Id"})
+        return
+    }
+
 	var req requests.AcademicRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -17,6 +23,7 @@ func CreateAcademic(c *gin.Context) {
 	}
 
 	academic := models.Academics{
+		UserID : userID,
 		Institution : req.Institution,
 		Degree : req.Degree,
 		Field : req.Field,
@@ -46,7 +53,7 @@ func IndexAcademic(c *gin.Context) {
 }
 
 func ShowAcademic(c *gin.Context) {
-	academicID, err := utils.DecodeID(c.Param("id"))
+	academicID, err := utils.DecodeID(c.Param("academicId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
@@ -62,7 +69,7 @@ func ShowAcademic(c *gin.Context) {
 }
 
 func UpdateAcademic(c *gin.Context) {
-	academicID, err := utils.DecodeID(c.Param("id"))
+	academicID, err := utils.DecodeID(c.Param("academicId"))
 	if err != nil {
 		c.JSON(404, gin.H{"Message": "invalid Id"})
 	}
@@ -91,7 +98,7 @@ func UpdateAcademic(c *gin.Context) {
 }
 
 func DeleteAcademic(c *gin.Context) {
-	academicID, err := utils.DecodeID(c.Param("id"))
+	academicID, err := utils.DecodeID(c.Param("academicId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid id"})
 		return

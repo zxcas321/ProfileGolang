@@ -6,15 +6,22 @@ import (
 )
 
 func ApiRoutes(r *gin.Engine) {
+	
+	admin := r.Group("/admins")
+	{
+		admin.GET("", api.IndexAdmin)
+		admin.POST("", api.CreateAdmin)
+	}
+
 	apiGroup := r.Group("/api")
 	{
 		userGroup := apiGroup.Group("/users")
 		{
 			userGroup.GET("", api.IndexUser)
-			userGroup.GET("/:id", api.ShowUser)
+			userGroup.GET("/:userId", api.ShowUser)
 			userGroup.POST("", api.CreateUser)
-			userGroup.PUT("/:id", api.UpdateUser)
-			userGroup.DELETE("/:id", api.DeleteUser)
+			userGroup.PUT("/:userId", api.UpdateUser)
+			userGroup.DELETE("/:userId", api.DeleteUser)
 			
 			projectGroup := userGroup.Group("/:userId/project")
 			{
@@ -33,9 +40,32 @@ func ApiRoutes(r *gin.Engine) {
 					skill.DELETE("/:skillId", api.DeleteSkill)
 				}
 			}
+			
+			experience := userGroup.Group("/:userId/experience") 
+			{
+				experience.GET("", api.IndexExperience)
+				experience.GET("/:experienceId", api.ShowExperience)
+				experience.POST("", api.CreateExperience)
+				experience.PUT("/:experienceId", api.UpdateExperience)
+				experience.DELETE("/:experienceId", api.DeleteExperience)
+			}
 
-
-
+			certification := userGroup.Group("/:userId/certification")
+			{
+				certification.GET("", api.IndexCertification)
+				certification.GET("/:certificationId", api.ShowCertification)
+				certification.POST("", api.CreateCertification)
+				certification.PUT("/:certificationId", api.UpdateCertification)
+				certification.DELETE("/certificationId", api.DeleteCertification)
+			}
+			academic := userGroup.Group("/:userId/academic")
+			{
+				academic.GET("", api.IndexAcademic)
+				academic.GET("/:academicId", api.ShowAcademic)
+				academic.POST("", api.CreateAcademic)
+				academic.PUT("/:academicId", api.UpdateAcademic)
+				academic.DELETE("/academicId", api.DeleteAcademic)
+			}
 		}
 	}
 }

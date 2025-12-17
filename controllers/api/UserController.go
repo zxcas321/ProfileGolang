@@ -47,7 +47,7 @@ func IndexUser(c *gin.Context) {
 }
 
 func ShowUser(c *gin.Context) {
-	userID, err := utils.DecodeID(c.Param("id"))
+	userID, err := utils.DecodeID(c.Param("userId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
@@ -62,7 +62,7 @@ func ShowUser(c *gin.Context) {
 }
 
 func UpdateUser(c *gin.Context) {
-	userID, err := utils.DecodeID(c.Param("id"))
+	userID, err := utils.DecodeID(c.Param("userId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
@@ -101,7 +101,7 @@ func UpdateUser(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-	userID, err := utils.DecodeID(c.Param("id"))
+	userID, err := utils.DecodeID(c.Param("userId"))
 	if err != nil {
 		c.JSON(404, gin.H{"message": "invalid Id"})
 		return
