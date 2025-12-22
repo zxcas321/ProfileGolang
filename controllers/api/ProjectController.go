@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/zxcas321/ProfileGolang/models"
 	"github.com/zxcas321/ProfileGolang/requests"
-	"github.com/zxcas321/ProfileGolang/services"
+	projectService "github.com/zxcas321/ProfileGolang/services/project"
 	"github.com/zxcas321/ProfileGolang/utils"
 )
 
@@ -28,18 +28,18 @@ func CreateProject(c *gin.Context){
 		WebUrl: req.WebUrl,
 	}
 
-	if err := services.CreateProject(&project); err != nil {
+	if err := projectService.CreateProject(&project); err != nil {
 		c.JSON(500, gin.H{"message" : "failed to create project"})
 		return
 	}
 
-	resp, _ := services.FindByIDProject(project.ID)
+	resp, _ := projectService.FindByIDProject(project.ID)
 
 	c.JSON(201, gin.H{"data" : resp})
 }
 
 func IndexProject(c *gin.Context){
-	project, err := services.FindAllProject()
+	project, err := projectService.FindAllProject()
 	if err != nil {
 		c.JSON(500, gin.H{"message": "failed to fetch project"})
 		return
@@ -55,7 +55,7 @@ func ShowProject(c *gin.Context){
 		return
 	}
 
-	project, err := services.FindByIDProject(projectID)
+	project, err := projectService.FindByIDProject(projectID)
 	if err != nil {
 		c.JSON(404, gin.H{"message" : "project not found"})
 		return
@@ -92,12 +92,12 @@ func UpdateProject(c *gin.Context){
 		return
 	}
 
-	if err := services.UpdateProject(projectID, data); err != nil {
+	if err := projectService.UpdateProject(projectID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
 
-	project, _ := services.FindByIDProject(projectID)
+	project, _ := projectService.FindByIDProject(projectID)
 	c.JSON(200, gin.H{"data": project})
 }
 
@@ -108,7 +108,7 @@ func DeleteProject(c *gin.Context) {
 		return
 	}
 
-	if err := services.DeleteProject(projectID); err != nil {
+	if err := projectService.DeleteProject(projectID); err != nil {
 		c.JSON(404, gin.H{"message": "project not found"})
 		return
 	}

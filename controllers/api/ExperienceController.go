@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/zxcas321/ProfileGolang/models"
 	"github.com/zxcas321/ProfileGolang/requests"
-	"github.com/zxcas321/ProfileGolang/services"
+	experienceService "github.com/zxcas321/ProfileGolang/services/experience"
 	"github.com/zxcas321/ProfileGolang/utils"
 )
 
@@ -29,18 +29,18 @@ func CreateExperience(c *gin.Context) {
 		EndDate:     req.EndDate,
 	}
 
-	if err := services.CreateExperience(&experience); err != nil {
+	if err := experienceService.CreateExperience(&experience); err != nil {
 		c.JSON(500, gin.H{"message": "failed to create experience"})
 		return
 	}
 
-	resp, _ := services.FindByIDExperience(experience.ID)
+	resp, _ := experienceService.FindByIDExperience(experience.ID)
 
 	c.JSON(201, gin.H{"data": resp})
 }
 
 func IndexExperience(c *gin.Context) {
-	experience, err := services.FindAllExperience()
+	experience, err := experienceService.FindAllExperience()
 	if err != nil {
 		c.JSON(500, gin.H{"message": "failed to fetch experience"})
 		return
@@ -56,7 +56,7 @@ func ShowExperience(c *gin.Context) {
 		return
 	}
 
-	experience, err := services.FindByIDExperience(experienceID)
+	experience, err := experienceService.FindByIDExperience(experienceID)
 	if err != nil {
 		c.JSON(404, gin.H{"message": "experience not found"})
 		return
@@ -92,12 +92,12 @@ func UpdateExperience(c *gin.Context) {
 		return
 	}
 
-	if err := services.UpdateExperience(experienceID, data); err != nil {
+	if err := experienceService.UpdateExperience(experienceID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
 
-	experience, _ := services.FindByIDExperience(experienceID)
+	experience, _ := experienceService.FindByIDExperience(experienceID)
 	c.JSON(200, gin.H{"data": experience})
 }
 
@@ -108,7 +108,7 @@ func DeleteExperience(c *gin.Context) {
 		return
 	}
 
-	if err := services.DeleteExperience(experienceId); err != nil {
+	if err := experienceService.DeleteExperience(experienceId); err != nil {
 		c.JSON(404, gin.H{"message": "experience not found"})
 		return
 	}

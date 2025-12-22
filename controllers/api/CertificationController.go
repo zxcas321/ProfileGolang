@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/zxcas321/ProfileGolang/models"
 	"github.com/zxcas321/ProfileGolang/requests"
-	"github.com/zxcas321/ProfileGolang/services"
+	certificationService "github.com/zxcas321/ProfileGolang/services/certification"
 	"github.com/zxcas321/ProfileGolang/utils"
 )
 
@@ -31,17 +31,17 @@ func CreateCertification(c *gin.Context) {
 		ImageUrl: req.ImageUrl,
 	}
 
-	if err := services.CreateCertification(&certification); err != nil {
+	if err := certificationService.CreateCertification(&certification); err != nil {
 		c.JSON(500, gin.H{"message": "failed to create certification"})
 		return
 	}
-	resp, _ := services.FindByIDCertification(certification.ID)
+	resp, _ := certificationService.FindByIDCertification(certification.ID)
 
 	c.JSON(201, gin.H{"data": resp})
 }
 
 func IndexCertification(c *gin.Context) {
-	certification, err := services.FindAllCertification()
+	certification, err := certificationService.FindAllCertification()
 	if err != nil {
 		c.JSON(500, gin.H{"message": "failerd to fetch certification"})
 		return
@@ -57,7 +57,7 @@ func ShowCertification(c *gin.Context) {
 		return
 	}
 
-	certification, err := services.FindByIDCertification(certificationID)
+	certification, err := certificationService.FindByIDCertification(certificationID)
 	if err != nil {
 		c.JSON(404, gin.H{"message": "certification not found"})
 		return
@@ -89,7 +89,7 @@ func UpdateCertification(c *gin.Context) {
 		data["expiry_date"] = req.ExpiryDate
 	}
 
-	if err := services.UpdateCertification(certificationID, data); err != nil {
+	if err := certificationService.UpdateCertification(certificationID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
@@ -103,7 +103,7 @@ func DeleteCertification(c *gin.Context) {
 		return
 	}
 
-	if err := services.DeleteCertification(certificationID); err != nil {
+	if err := certificationService.DeleteCertification(certificationID); err != nil {
 		c.JSON(4040, gin.H{"Message": "certification not found"})
 	}
 

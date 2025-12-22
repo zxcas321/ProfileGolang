@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/zxcas321/ProfileGolang/models"
 	"github.com/zxcas321/ProfileGolang/requests"
-	"github.com/zxcas321/ProfileGolang/services"
+	adminService "github.com/zxcas321/ProfileGolang/services/admin"
 	"github.com/zxcas321/ProfileGolang/utils"
 )
 
@@ -22,17 +22,17 @@ func CreateAdmin(c *gin.Context) {
 		Password: req.Password,
 	}
 
-	if err := services.CreateAdmin(&admin); err != nil {
+	if err := adminService.CreateAdmin(&admin); err != nil {
 		c.JSON(500, gin.H{"message": err.Error()})
 		return
 	}
-	resp, _ := services.FindByIDAdmin(admin.ID)
+	resp, _ := adminService.FindByIDAdmin(admin.ID)
 
 	c.JSON(201, gin.H{"data": resp})
 }
 
 func IndexAdmin(c *gin.Context) {
-	admin, err := services.FindAllAdmin()
+	admin, err := adminService.FindAllAdmin()
 	if err != nil {
 		c.JSON(500, gin.H{"message": "failed to fetch admin"})
 		return
@@ -48,7 +48,7 @@ func ShowAdmin(c *gin.Context) {
 		return
 	}
 
-	admin, err := services.FindByIDAdmin(adminID)
+	admin, err := adminService.FindByIDAdmin(adminID)
 	if err != nil {
 		c.JSON(404, gin.H{"message": "admin not found"})
 		return
@@ -77,7 +77,7 @@ func UpdateAdmin(c *gin.Context) {
 		data["email"] = req.Email
 	}
 
-	if err := services.UpdateAdmin(adminID, data); err != nil {
+	if err := adminService.UpdateAdmin(adminID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
@@ -91,7 +91,7 @@ func DeleteAdmin(c *gin.Context) {
 		return
 	}
 
-	if err := services.DeleteAdmin(adminID); err != nil {
+	if err := adminService.DeleteAdmin(adminID); err != nil {
 		c.JSON(4040, gin.H{"Message": "admin not found"})
 	}
 

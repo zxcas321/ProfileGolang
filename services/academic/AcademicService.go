@@ -1,4 +1,4 @@
-package services
+package academic
 
 import (
 	"github.com/zxcas321/ProfileGolang/mappers"

@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/zxcas321/ProfileGolang/models"
 	"github.com/zxcas321/ProfileGolang/requests"
-	"github.com/zxcas321/ProfileGolang/services"
+	skillService "github.com/zxcas321/ProfileGolang/services/project"
 	"github.com/zxcas321/ProfileGolang/utils"
 )
 
@@ -28,18 +28,18 @@ func CreateSkill(c *gin.Context) {
 		Category:  req.Category,
 	}
 
-	if err := services.CreateSkill(&skill); err != nil {
+	if err := skillService.CreateSkill(&skill); err != nil {
 		c.JSON(500, gin.H{"message": "failed to create skill"})
 		return
 	}
 
-	resp, _ := services.FindByIDSkill(skill.ID)
+	resp, _ := skillService.FindByIDSkill(skill.ID)
 
 	c.JSON(201, gin.H{"data": resp})
 }
 
 func IndexSkill(c *gin.Context) {
-	skill, err := services.FindAllSkill()
+	skill, err := skillService.FindAllSkill()
 	if err != nil {
 		c.JSON(500, gin.H{"message": "failed to fetch skill"})
 		return
@@ -55,7 +55,7 @@ func ShowSkill(c *gin.Context) {
 		return
 	}
 
-	skill, err := services.FindByIDSkill(skillID)
+	skill, err := skillService.FindByIDSkill(skillID)
 	if err != nil {
 		c.JSON(4040, gin.H{"message": "skill not found"})
 		return
@@ -91,12 +91,12 @@ func UpdateSkill(c *gin.Context) {
 		return
 	}
 
-	if err := services.UpdateSkill(skillID, data); err != nil {
+	if err := skillService.UpdateSkill(skillID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
 
-	skill, _ := services.FindByIDSkill(skillID)
+	skill, _ := skillService.FindByIDSkill(skillID)
 	c.JSON(200, gin.H{"data": skill})
 }
 
@@ -107,7 +107,7 @@ func DeleteSkill(c *gin.Context) {
 		return
 	}
 
-	if err := services.DeleteSkill(SkillID); err != nil {
+	if err := skillService.DeleteSkill(SkillID); err != nil {
 		c.JSON(404, gin.H{"message": "skill not found"})
 		return
 	}

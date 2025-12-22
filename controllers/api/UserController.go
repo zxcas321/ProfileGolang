@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/zxcas321/ProfileGolang/models"
 	"github.com/zxcas321/ProfileGolang/requests"
-	"github.com/zxcas321/ProfileGolang/services"
+	userService "github.com/zxcas321/ProfileGolang/services/user"
 	"github.com/zxcas321/ProfileGolang/utils"
 )
 
@@ -26,18 +26,18 @@ func CreateUser(c *gin.Context) {
 		ProfilePicture: req.ProfilePicture,
 	}
 
-	if err := services.CreateUser(&user); err != nil {
+	if err := userService.CreateUser(&user); err != nil {
 		c.JSON(500, gin.H{"message": "failed to create user"})
 		return
 	}
 
-	resp, _ := services.FindByIDUser(user.ID)
+	resp, _ := userService.FindByIDUser(user.ID)
 
 	c.JSON(201, gin.H{"data": resp})
 }
 
 func IndexUser(c *gin.Context) {
-	users, err := services.FindAllUser()
+	users, err := userService.FindAllUser()
 	if err != nil {
 		c.JSON(500, gin.H{"message": "failed to fetch users"})
 		return
@@ -53,7 +53,7 @@ func ShowUser(c *gin.Context) {
 		return
 	}
 
-	user, err := services.FindByIDUser(userID)
+	user, err := userService.FindByIDUser(userID)
 	if err != nil {c.JSON(404, gin.H{"message": "user not found"})
 		return
 	}
@@ -91,12 +91,12 @@ func UpdateUser(c *gin.Context) {
 		return
 	}
 
-	if err := services.UpdateUser(userID, data); err != nil {
+	if err := userService.UpdateUser(userID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
 
-	user, _ := services.FindByIDUser(userID)
+	user, _ := userService.FindByIDUser(userID)
 	c.JSON(200, gin.H{"data": user})
 }
 
@@ -107,7 +107,7 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 
-	if err := services.DeleteUser(userID); err != nil {
+	if err := userService.DeleteUser(userID); err != nil {
 		c.JSON(404, gin.H{"message": "user not found"})
 		return
 	}

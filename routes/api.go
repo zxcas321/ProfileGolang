@@ -3,22 +3,22 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/zxcas321/ProfileGolang/controllers/api"
+	"github.com/zxcas321/ProfileGolang/middlewares"
 )
 
 func ApiRoutes(r *gin.Engine) {
-	
-	admin := r.Group("/admins")
+	apiGroup := r.Group("/api")
+	apiPublic := apiGroup.Group("/users")
 	{
-		admin.GET("", api.IndexAdmin)
-		admin.POST("", api.CreateAdmin)
+		apiPublic.GET("", api.IndexUser)
+		apiPublic.GET("/:userId", api.ShowUser)
 	}
 
-	apiGroup := r.Group("/api")
+	apiAdmin := apiGroup.Group("")
+	apiAdmin.Use(middlewares.AuthMiddleware(), middlewares.AdminOnly())
 	{
-		userGroup := apiGroup.Group("/users")
+		userGroup := apiAdmin.Group("/users")
 		{
-			userGroup.GET("", api.IndexUser)
-			userGroup.GET("/:userId", api.ShowUser)
 			userGroup.POST("", api.CreateUser)
 			userGroup.PUT("/:userId", api.UpdateUser)
 			userGroup.DELETE("/:userId", api.DeleteUser)
@@ -56,7 +56,7 @@ func ApiRoutes(r *gin.Engine) {
 				certification.GET("/:certificationId", api.ShowCertification)
 				certification.POST("", api.CreateCertification)
 				certification.PUT("/:certificationId", api.UpdateCertification)
-				certification.DELETE("/certificationId", api.DeleteCertification)
+				certification.DELETE("/:certificationId", api.DeleteCertification)
 			}
 			academic := userGroup.Group("/:userId/academic")
 			{
@@ -64,7 +64,7 @@ func ApiRoutes(r *gin.Engine) {
 				academic.GET("/:academicId", api.ShowAcademic)
 				academic.POST("", api.CreateAcademic)
 				academic.PUT("/:academicId", api.UpdateAcademic)
-				academic.DELETE("/academicId", api.DeleteAcademic)
+				academic.DELETE("/:academicId", api.DeleteAcademic)
 			}
 		}
 	}

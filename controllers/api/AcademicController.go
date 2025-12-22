@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/zxcas321/ProfileGolang/models"
 	"github.com/zxcas321/ProfileGolang/requests"
-	"github.com/zxcas321/ProfileGolang/services"
+	academicService "github.com/zxcas321/ProfileGolang/services/academic"
 	"github.com/zxcas321/ProfileGolang/utils"
 )
 
@@ -33,17 +33,17 @@ func CreateAcademic(c *gin.Context) {
 		Description : req.Description,
 	}
 
-	if err := services.CreateAcademic(&academic); err != nil {
+	if err := academicService.CreateAcademic(&academic); err != nil {
 		c.JSON(500, gin.H{"message": "failed to create Academics"})
 		return
 	}
-	resp, _ := services.FindByIDAcademic(academic.ID)
+	resp, _ := academicService.FindByIDAcademic(academic.ID)
 
 	c.JSON(201, gin.H{"data": resp})
 }
 
 func IndexAcademic(c *gin.Context) {
-	academic, err := services.FindAllAcademic()
+	academic, err := academicService.FindAllAcademic()
 	if err != nil {
 		c.JSON(500, gin.H{"message": "failed to fetch academic"})
 		return
@@ -59,7 +59,7 @@ func ShowAcademic(c *gin.Context) {
 		return
 	}
 
-	academic, err := services.FindByIDAcademic(academicID)
+	academic, err := academicService.FindByIDAcademic(academicID)
 	if err != nil {
 		c.JSON(404, gin.H{"message": "academic not found"})
 		return
@@ -90,7 +90,7 @@ func UpdateAcademic(c *gin.Context) {
 	data["description"] = req.Description
 
 
-	if err := services.UpdateAcademic(academicID, data); err != nil {
+	if err := academicService.UpdateAcademic(academicID, data); err != nil {
 		c.JSON(500, gin.H{"message": "update failed"})
 		return
 	}
@@ -104,7 +104,7 @@ func DeleteAcademic(c *gin.Context) {
 		return
 	}
 
-	if err := services.DeleteAcademic(academicID); err != nil {
+	if err := academicService.DeleteAcademic(academicID); err != nil {
 		c.JSON(4040, gin.H{"Message": "academic not found"})
 	}
 
